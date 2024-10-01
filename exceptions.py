@@ -15,32 +15,48 @@ class WidgetException(Exception):
         else:
             super().__init__(self.internal_error_msg)
 
-        if user_err_msg:
+        if user_err_msg is not None:
             self.user_error_msg = user_err_msg
 
 
 class SupplierException(WidgetException):
     """Exceptions occurred on the supplier's end."""
 
+    internal_error_msg = "Somthing went wrong on supplier's end."
+
 
 class NotManufacturedError(SupplierException):
     """Exception raised when a product is not manufactured anymore."""
+
+    internal_error_msg = 'Product is not manufactured anymore.'
+    user_error_msg = 'This product is not manufactured anymore.'
 
 
 class ProductionDelayedError(SupplierException):
     """Exception raised when production is delayed."""
 
+    internal_error_msg = 'Production is delayed.'
+    user_error_msg = 'The production of this product is delayed.'
+
 
 class ShippingDelayedError(SupplierException):
     """Exception raised when shipping is delayed."""
 
+    internal_error_msg = 'Shipping is delayed.'
+    user_error_msg = 'The shipping of this product is delayed.'
 
 class CheckoutException(WidgetException):
     """Indicates errors during the checkout process."""
 
+    internal_error_msg = 'Generic checkout exception.'
+    user_error_msg = ('We are sorry, but something went wrong in '
+                      'the checkout process.')
+
 
 class InventoryException(CheckoutException):
     """Inventory type exceptions."""
+
+    internal_error_msg = 'Generic inventory exception.'
 
 
 class OutOfStockError(InventoryException):
@@ -51,6 +67,8 @@ class OutOfStockError(InventoryException):
 
 class PricingException(CheckoutException):
     """Pricing exceptions."""
+
+    internal_error_msg = 'Generic pricing exception.'
 
 
 class InvalidCouponCodeError(PricingException):
