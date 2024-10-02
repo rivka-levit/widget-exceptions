@@ -1,6 +1,8 @@
 from http import HTTPStatus
 from datetime import datetime, timezone
 
+import json
+
 
 class WidgetException(Exception):
     """Base class for exceptions in this module."""
@@ -18,6 +20,13 @@ class WidgetException(Exception):
 
         if user_err_msg is not None:
             self.user_error_msg = user_err_msg
+
+    def to_json(self):
+        data = {
+            'status': self.http_status,
+            'message': self.user_error_msg
+        }
+        return json.dumps(data)
 
     def log_console(self):
         exception = {
