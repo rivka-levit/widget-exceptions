@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from datetime import datetime, timezone
 
 
 class WidgetException(Exception):
@@ -17,6 +18,19 @@ class WidgetException(Exception):
 
         if user_err_msg is not None:
             self.user_error_msg = user_err_msg
+
+    def log_console(self):
+        exception = {
+            'type': self.__class__.__name__,
+            'status': self.http_status,
+            'message': self.args[0] if self.args else self.internal_error_msg,
+            'args': self.args[1:] if self.args else None,
+        }
+        print(
+            f'EXCEPTION occurred at '
+            f'{datetime.now(tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')}:\n'
+            f'{exception}'
+        )
 
 
 class SupplierException(WidgetException):
