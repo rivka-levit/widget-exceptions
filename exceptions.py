@@ -1,7 +1,9 @@
+import traceback
+import json
+
 from http import HTTPStatus
 from datetime import datetime, timezone
-
-import json
+from pprint import pprint
 
 
 class WidgetException(Exception):
@@ -34,12 +36,17 @@ class WidgetException(Exception):
             'status': self.http_status,
             'message': self.args[0] if self.args else self.internal_error_msg,
             'args': self.args[1:] if self.args else None,
+            'traceback': ''.join(traceback.format_exception(self))
         }
         print(
             f'EXCEPTION occurred at '
-            f'{datetime.now(tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')}:\n'
-            f'{exception}'
+            f'{datetime.now(tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')}:'
         )
+        for key, value in exception.items():
+            if key != 'traceback':
+                print(f'{key}: {value}')
+            else:
+                print(f'{value}')
 
 
 class SupplierException(WidgetException):
