@@ -3,7 +3,6 @@ import json
 
 from http import HTTPStatus
 from datetime import datetime, timezone
-from pprint import pprint
 
 
 class WidgetException(Exception):
