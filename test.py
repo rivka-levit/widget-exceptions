@@ -3,11 +3,10 @@ Tests for exceptions.
 Command to run all the tests: python -m unittest -v
 """
 
-import sys
+import traceback
 
 from io import StringIO
 from contextlib import redirect_stdout
-from sys import exception
 
 from unittest import TestCase
 from exceptions import WidgetException
@@ -31,13 +30,15 @@ class TestWidgetExceptions(TestCase):
     def test_log_console_output_to_console(self):
         """Test output is realised to the console."""
 
-        with redirect_stdout(StringIO()) as logged_out:
+        with (redirect_stdout(StringIO()) as logged_out):
             try:
                 raise WidgetException()
             except WidgetException as e:
+                tb = ''.join(traceback.format_exception(e))
                 e.log_console()
                 output = logged_out.getvalue()
 
                 self.assertIn(e.__class__.__name__, output)
                 self.assertIn(str(e.http_status), output)
                 self.assertIn(e.internal_error_msg, output)
+                self.assertIn(tb, output)
