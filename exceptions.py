@@ -13,12 +13,9 @@ class WidgetException(Exception):
     user_error_msg = 'We are sorry, but something went wrong on our end.'
 
     def __init__(self, *args, user_err_msg: str = None) -> None:
+        super().__init__(*args)
         if args:
             self.internal_error_msg = args[0]
-            super().__init__(*args)
-        else:
-            super().__init__(self.internal_error_msg)
-
         if user_err_msg is not None:
             self.user_error_msg = user_err_msg
 
