@@ -21,8 +21,12 @@ class WidgetException(Exception):
 
     def to_json(self):
         data = {
-            'status': self.http_status,
-            'message': self.user_error_msg
+            'code': self.http_status.value,
+            'exception_type': type(self).__name__,
+            'message': f'{self.http_status.phrase}: {self.user_error_msg}',
+            'time_utc': f'{datetime.now(tz=timezone.utc).strftime(
+                '%Y-%m-%d %H:%M:%S %Z'
+            )}:'
         }
         return json.dumps(data)
 

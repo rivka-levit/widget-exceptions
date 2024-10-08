@@ -88,8 +88,10 @@ class TestWidgetExceptions(TestCase):
         returned_value = e.exception.to_json()
 
         self.assertIsInstance(returned_value, str)
-        self.assertIn('status', returned_value)
+        self.assertIn('code', returned_value)
+        self.assertIn('exception_type', returned_value)
         self.assertIn('message', returned_value)
+        self.assertIn('time_utc', returned_value)
 
     def test_log_console_output_to_console(self):
         """Test output is realised to the console for base class."""
