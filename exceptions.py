@@ -3,6 +3,7 @@ import json
 
 from http import HTTPStatus
 from datetime import datetime, timezone
+from collections.abc import Generator
 
 
 class WidgetException(Exception):
@@ -18,6 +19,10 @@ class WidgetException(Exception):
             self.internal_error_msg = args[0]
         if user_err_msg is not None:
             self.user_error_msg = user_err_msg
+
+    @property
+    def traceback(self) -> Generator[str, None, None]:
+        return traceback.TracebackException.from_exception(self).format()
 
     def to_json(self):
         data = {
@@ -36,7 +41,7 @@ class WidgetException(Exception):
             'status': self.http_status,
             'message': self.args[0] if self.args else self.internal_error_msg,
             'args': self.args[1:] if self.args else None,
-            'traceback': ''.join(traceback.format_exception(self))
+            'traceback': ''.join(self.traceback)
         }
         print(
             f'EXCEPTION occurred at '

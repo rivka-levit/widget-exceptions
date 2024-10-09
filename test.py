@@ -32,7 +32,9 @@ class TestWidgetExceptions(TestCase):
                 try:
                     raise exc()
                 except exc as e:
-                    tb = ''.join(traceback.format_exception(e))
+                    tb = ''.join(
+                        traceback.TracebackException.from_exception(e).format()
+                    )
                     e.log_console()
                     output = logged_out.getvalue()
 
